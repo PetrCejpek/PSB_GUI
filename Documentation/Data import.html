@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope="" itemtype="http://www.mathworks.com/help/schema/MathWorksDocPage">
+<head>
+<meta xmlns="http://www.w3.org/1999/xhtml" charset="utf-8">
+<meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta xmlns="http://www.w3.org/1999/xhtml" http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Data import</title>
+</head>
+    
+<body>
+<h1>Data import</h1>
+    <p>PSB_GUI enables the semi-automatic import of the experimental data. These should be provided in the tabulated structure in a text file or spread sheet. The example of the data format is shown in the following figure:</p>
+    
+    <img src="Data format.png" alt="Data format" width="800" height="411">
+    
+    <p>To refine peak shift (PS) and peak broadening (PB) the following data are mandatory:</p>
+    <ul>
+        <li>H, K, L diffraction indices - for both PS and PB</li>
+        <li>the positions of the Bragg reflections (2&#952, or q) - for both PS and PB</li>
+        <li>&#968 angle (inclination with respect to the sample normal) - for PS</li>
+        <li>either FWHM or broadening values (or both) - for PB</li>
+    </ul>
+    
+    <p>Other parameters are optional, also depending on the fact if you want to use some advanced models for the refinement. The information about the wavelength should be included at the beginning of the input file before the names of individual columns. However, it is not mandatory and could be also specified additionaly via <i>Manual selection</i> tool.</p>
+
+    <p>If the columns are properly named, the input script tries to import the corresponding data. If the search for individual columns went wrong, the corresponding cells in the <i>Data</i> table would be filled with NaNs. However, the corresponding data still may be extracted by the <i>Manual selection</i>.</p>
+ 
+<h2>Manual selection</h2>
+    <p>This is the overview of the Manual selection window:</p>
+    
+    <img src="Manual selection.png" alt="Main window of PSB_GUI" width="800" height="311">
+    
+    <p>On the left, you can see the preview of the data available after the input, together with the recognized column names (the strings after var#:). On the right hand side, you have several options for the choice of corresponding data. You can select the corresponding column together with the appropriate unit, or you can compute the corresponding data using a formula written in Matlab syntax. <b>Please note, that the native units for all angular values in this program are degrees.</b></p>
+
+    <p>In the example of the abovementioned figure, the measured data were fitted by an asymmetric pseudo-Voigt function during the preprocessing. Therefore, the input data included <i>fwhm</i> on the left and right side of the peak. The <i>fwhm</i> used then for PSB_GUI is specified by the formula: <i>(var8+var9)/2</i>, which means it will be computed as the average of the columns 8 and 9 from the table on the left.</p>
+
+    <p>The wavelength could be specified by a custom number or from the list of predefined values.</p>    
+</body>
+</html>

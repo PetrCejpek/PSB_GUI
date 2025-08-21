@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope="" itemtype="http://www.mathworks.com/help/schema/MathWorksDocPage">
+<head>
+<meta xmlns="http://www.w3.org/1999/xhtml" charset="utf-8">
+<meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta xmlns="http://www.w3.org/1999/xhtml" http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Groups separation</title>
+</head>
+    
+<body>
+<h1>Groups separation</h1>
+    <p>Group separator tool (see the figure below) serves, as the name suggests, for a separation of datapoints into groups. The set of points currently included in the selected group is represented by the ticks in the column <i>In group</i> inside the <i>Data</i> table. The default datapoint group is set as all peaks and no point can be unticked.</p>
+    
+    <img src="Main window.png" alt="Main window of PSB_GUI" width="800" height="400">
+    
+    <p>To add a new group just click on the <i>New</i> button. Then select the newly created group (by clicking on it in <i>Group separator</i> section) and you will be allowed to tick or untick the tickboxes inside the <i>Data</i> table. The point choice is not group exclusive - if needed, the point can belong to several number of groups. The selected/active group for which you are currently changing the parameters is highlighted in the yellow box under the data table. In the example of abovementioned figure, the user is currently working with the default <i>Group #0: All peaks</i>.</p>
+    
+    <p>The group separator can be also used to exclude apparently wrong datapoints. For example, the peaks had the low intensity, so the corresponding fits during the preprocessing were bad and have produced refined parameters with the strange or non-physical values. In such a case just create a new group and untick datapoints which you want to exclude from the further refinement.</p>
+   
+    <p>If you want to remove a group, select it by clicking on it in the <i>Group separator</i> section and press the <i>Remove</i> button.</p>
+    
+    <p><b>IMPORTANT: If you want to perform a refinement of the datapoints corresponding to the individual groups, you need to tick the <i>Fit groups</i> tickbox which is placed on the right of the <i>Fit</i> button. Otherwise, the refinement will be still performed on the all peaks (default Group #0).</b></p>
+        
+<h2>Quick selection tool</h2>
+    <p>If the labels are available in the imported data, Quick selector could be used for the fast ticking of datapoitns. Naturaly, this selector is not available for the <i>All peaks</i> group.</p>
+	
+	<p>After launching the Quick selector, user can choose the condition for the ticking based on the labels introduced during data preprocessing. Quick selection tool will find unique labels in the dataset. Then, the user can select the labels containing or being exactly the specific string.</p>
+
+</body>
+</html>

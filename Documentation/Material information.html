@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope="" itemtype="http://www.mathworks.com/help/schema/MathWorksDocPage">
+<head>
+<meta xmlns="http://www.w3.org/1999/xhtml" charset="utf-8">
+<meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta xmlns="http://www.w3.org/1999/xhtml" http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Material information</title>
+</head>
+    
+<body>
+<h1>Material information</h1>
+    <p>The user should specify here, which information about the material is known for the theoretical model and further refinement. If you want to perform the fit of X-ray line shifts with the <i>Advanced options</i>, the knowledge of stiffness (C_ij) or compliance (S_ij) tensors/matrices is mandatory.</p>
+    
+    <img src="Main window.png" alt="Main window of PSB_GUI" width="800" height="400">
+    
+    <p>The three following options for the material information are possible:</p>
+    <ol>
+        <li><i>Uknown elastic constants</i> - you can use only basic models with lateral residual stress for the refinement. However, the residual stress cannot be fully evaluated, only its product with the intrisic lattice parameter can be obtained.</li>
+        <li><i>E, &#957 and G</i> - with this option you known the Young modulus (E), Poisson ratio (&#957) and optionally the shear modulus (G). The material will be understood as the isotropic medium with these parameters. Again, you can use only basic models with lateral residual stress for the refinement, but this time the residual stress and the intrinsic lattice parameter can be evaluated.</li>
+        <li><i>S_ij or C_ij</i> - the compliance or the stiffness tensors/matrices are known. With this knowledge, the <i>Advanced options</i> could be used for the line shift refinement as well.</li>
+    </ol>
+
+    <p>For the options 2 and 3, you can specify the material from the small database located in the middle of <i>Material information</i> section. If needed, you can also directly edit the custom numeric values located inside the tables on the right. Also, you can access the databases files, which are saved as the spreadsheets and located directly in the PSB_GUI folder. Here you can add your own entries - the databases will be updated when you launch a new PSB_GUI instance.</p>
+</body>
+</html>

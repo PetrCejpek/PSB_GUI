@@ -22,7 +22,7 @@ function varargout = PSB_GUI(varargin)
 
 % Edit the above text to modify the response to help PSB_GUI
 
-% Last Modified by GUIDE v2.5 09-May-2025 17:58:59
+% Last Modified by GUIDE v2.5 21-Aug-2025 15:25:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1029,11 +1029,13 @@ if I==1
     for n=1:N
         handles.DataTable_tab.Data(n,end)={true};
     end
+    handles.QuickSelector_btn.Enable='off';
 else
     handles.DataTable_tab.ColumnEditable(end)=1;
     for n=1:N
         handles.DataTable_tab.Data(n,end)={logical(handles.DataGroup(n,I))}; % there might be better option than doing a for cycle, but I haven't found it
     end
+    handles.QuickSelector_btn.Enable='on';
 end
 % now we need to fill the information about the models of the current group
 % Label
@@ -2977,3 +2979,160 @@ handles.GroupsModels(I).MicrostrainOptions.ParFix=OutputData.ParFix;
 handles.GroupsModels(I).MicrostrainOptions.ParLB=OutputData.ParLB;
 handles.GroupsModels(I).MicrostrainOptions.ParUB=OutputData.ParUB;
 guidata(hObject, handles);
+
+
+% --------------------------------------------------------------------
+function File_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to File_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Help_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to Help_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+web('Documentation\Introduction.html','-new')
+
+% --------------------------------------------------------------------
+function OpenProject_menuit_Callback(hObject, eventdata, handles)
+% hObject    handle to OpenProject_menuit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+answer = questdlg('All unsaved changes will be lost. Do you want to save your project?','Save the project','Yes','No','Yes');
+if strcmp(answer,'Yes')
+    if isfield(handles,'LastFilePath')
+        [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project',handles.LastFilePath);
+        handles.LastFilePath=PathName;
+    else
+        [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project');
+        handles.LastFilePath=PathName;
+    end
+    save([PathName FileName],'handles','-mat');
+    handles.figure1.Name=['PSB_GUI: ' FileName];
+    guidata(hObject, handles);
+end
+if strcmp(answer,'No') || FileName~=0
+    if isfield(handles,'LastFilePath')
+        [FileName,PathName,~] = uigetfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Load your previous project',handles.LastFilePath);
+        handles.LastFilePath=PathName;
+    else
+        [FileName,PathName,~] = uigetfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Load your previous project');
+        handles.LastFilePath=PathName;
+    end
+    if FileName~=0
+        hf=gcf;
+        load([PathName FileName],'-mat');
+        handles.figure1.Name=['PSB_GUI: ' FileName];
+        guidata(hObject, handles);
+        pause(0.001); % wait little bit to close the current window after opening the new one
+
+        delete(hf);
+    end
+end
+
+
+% --------------------------------------------------------------------
+function SaveProject_menuit_Callback(hObject, eventdata, handles)
+% hObject    handle to SaveProject_menuit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if isfield(handles,'LastFilePath')
+    [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project',handles.LastFilePath);
+    handles.LastFilePath=PathName;
+else
+    [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project');
+    handles.LastFilePath=PathName;
+end
+if FileName~=0
+    save([PathName FileName],'handles','-mat');
+    handles.figure1.Name=['PSB_GUI: ' FileName];
+    guidata(hObject, handles);
+end
+
+
+% --- Executes on button press in DataImportHelp_btn.
+function DataImportHelp_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to DataImportHelp_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+web('Documentation\Data import.html','-new')
+
+
+% --- Executes on button press in GroupSeparatorHelp_btn.
+function GroupSeparatorHelp_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to GroupSeparatorHelp_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+web('Documentation\Groups separation.html','-new')
+
+
+% --- Executes on button press in MaterialInformationHelp_btn.
+function MaterialInformationHelp_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to MaterialInformationHelp_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+web('Documentation\Material information.html','-new')
+
+
+% --- Executes on button press in FitAndResultsHelp_btn.
+function FitAndResultsHelp_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to FitAndResultsHelp_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+web('Documentation\Fit and Results.html','-new')
+
+
+% --- Executes on button press in QuickSelector_btn.
+function QuickSelector_btn_Callback(hObject, eventdata, handles)
+% hObject    handle to QuickSelector_btn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+InputData.Labels=handles.Data.label;
+G=handles.Groups_list.Value; % group number
+InputData.CurrentSelection=handles.DataGroup(:,G);
+OutputData=QuickSelector_GUI(InputData);
+
+handles.DataGroup(:,G)=OutputData.NewSelection;
+% display immediately in the Group table
+for n=1:numel(handles.Data.label)
+    handles.DataTable_tab.Data(n,end)={logical(handles.DataGroup(n,G))}; % there might be better option than doing a for cycle, but I haven't found it
+end
+guidata(hObject, handles);
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+answer = questdlg('All unsaved changes will be lost. Do you want to save your project?','Save or close','Yes','No','Yes');
+if strcmp(answer,'Yes')
+    if isfield(handles,'LastFilePath')
+        [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project',handles.LastFilePath);
+        handles.LastFilePath=PathName;
+    else
+        [FileName,PathName,~] = uiputfile({'*.psbproj','PSB_GUI project files (*.psbproj)'},'Save your current project');
+        handles.LastFilePath=PathName;
+    end
+    if FileName~=0
+        save([PathName FileName],'handles','-mat');
+        handles.figure1.Name=['PSB_GUI: ' FileName];
+        guidata(hObject, handles);
+        % the GUI will be closed only if the saving was not canceled
+        delete(hObject);
+    end
+else
+    delete(hObject);
+end
+
+
+% --------------------------------------------------------------------
+function About_menu_Callback(hObject, eventdata, handles)
+% hObject    handle to About_menu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+helpdlg({'PSB_GUI is Matlab GUI application developed for the refinement of residual stress, microstrain and crystallite sizes in cubic materials.';' ';'Version: 1.01';' ';['Created by Petr Cejpek ' char(169) ' 2025']},'About PSB_GUI');

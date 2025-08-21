@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope="" itemtype="http://www.mathworks.com/help/schema/MathWorksDocPage">
+<head>
+<meta xmlns="http://www.w3.org/1999/xhtml" charset="utf-8">
+<meta xmlns="http://www.w3.org/1999/xhtml" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta xmlns="http://www.w3.org/1999/xhtml" http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Introduction</title>
+</head>
+    
+<body>
+<h1>Introduction</h1>
+    <p>PSB_GUI is the Matlab form application developed for the refinement of the X-ray diffraction (XRD) line shift and broadening to obtain information about the residual stress, crystallites sizes and microstrain in <i>cubic</i> materials. The application has been created with the <a href="https://www.mathworks.com/help/matlab/ref/guide.html">guide</a> enviroment. To run it properly, Matlab <a href="https://www.mathworks.com/products/optimization.html">Optimalisation toolbox</a> is required.</p>
+
+    <p>Before own usage of this program, the experimental data input should be carefully prepared by a user. This requires a refinement of the measured data (for example 2&#952-scans of individual Bragg reflections) by an external function or script. The resulting input data should be provided in a tabulated format in a text file or a spread sheet. See also <a href="Data import.html">Data import</a> section.</p>
+
+    <p>The main aspect of PSB_GUI is the separation of individual experimental points into groups. Each group can be then connected to its own combination of theoretical models for the following refinement. The only condition is to have the experimental data corresponding only to one sample measured at the same conditions.</p>
+
+<h2>Main window</h2>
+    <p>The main window of PSB_GUI can be separated into several parts (see the figure):</p>
+    
+    <img src="Main window.png" alt="Main window of PSB_GUI" width="800" height="400">
+    
+    <p>In the <i>Input data</i> section, you can import your preprocessed experimental data and/or manually specified them if the semi-automatic input didn't work as expected. The <i>Group separator</i> section serves for the separation of your datapoints into groups, or to exclude obviously wrong datapoints from the fit. In the <i>Material information</i> part, you can specify the available information of your studied material. The <i>Fit and models</i> options allow you to choose various theoretical models and fitting parameters for your refinement. Each of your specified groups of datapoints has its own models and is fitted separately*. The results of the last successful refinement are plotted in the figures on the left side of the main window and also printed into <i>Results</i> section together with the own Matlab console.</p>
+
+ <h2>Aknowledgement and references</h2>
+    <p>I would like to thank Prof. David Rafaja for many fruitful discussions about the XRD line shift and broadening topic, without which this program could not be developed in its current form. The books and scientific papers used during the development:</p>
+    <ol>
+        <li>Warren, B. E. (1969). X-ray Diffraction. Addison-Wesley Publishing Company</li>
+        <li>Welzel, U., et al. (2005). Journal of Applied Crystallography, 38(1), 1–29. <a href="https://doi.org/10.1107/S0021889804029516">https://doi.org/10.1107/S0021889804029516</a></li>
+        <li>Ungár, T., et al. (1999). Journal of Applied Crystallography, 32(5), 992–1002. <a href="https://doi.org/10.1107/S0021889899009334">https://doi.org/10.1107/S0021889899009334</a></li>
+        <li>Kužel, R., et al. (1994). Thin Solid Films, 247(1), 64–78. <a href="https://www.sciencedirect.com/science/article/pii/0040609094904774">https://www.sciencedirect.com/science/article/pii/0040609094904774</a></li>
+    </ol>
+
+    <p>Petr Cejpek &#169 2024-2025</p>
+</body>
+</html>

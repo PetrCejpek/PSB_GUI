@@ -46,8 +46,29 @@ switch FitOpt.PeakShiftModel
         Gamma=(h.^2.*k.^2+k.^2.*l.^2+h.^2.*l.^2)./((h.^2+k.^2+l.^2).^2);
         y_stress=p(1).*x+p(2).*Gamma.*x+p(3).*Gamma+p(4);
     case 'Reuss'
+        % need to add condition for known material
         Gamma=(h.^2.*k.^2+k.^2.*l.^2+h.^2.*l.^2)./((h.^2+k.^2+l.^2).^2);
-        y_stress=p(1).*x-3*p(2).*Gamma.*x+2*p(2).*Gamma+p(3);
+
+        if FitOpt.Material.av==1
+            switch FitOpt.Material.Option
+                case 'E_nu_G'
+                    s11=1./FitOpt.Material.E
+                    s44=1./FitOpt.Material.G
+                    s12=-FitOpt.Material.nu*s11
+                    s0=s11-s12-0.5*s44;
+                    
+                    s1=s12+Gamma.*s0;
+                    s2=2*(s11-s12-3*Gamma.*s0);
+                case {'Sij'; 'Cij'}
+                    s0=FitOpt.Material.Sij(1,1)-FitOpt.Material.Sij(1,2)-0.5*FitOpt.Material.Sij(4,4);
+                    s1=FitOpt.Material.Sij(1,2)+Gamma.*s0;
+                    s2=2*(FitOpt.Material.Sij(1,1)-FitOpt.Material.Sij(1,2)-3*Gamma.*s0);
+            end
+
+            y_stress=p(1).*(p(2).*(0.5.*s2.*x+2.*s1)+1);
+        else
+            y_stress=p(1).*x-3*p(2).*Gamma.*x+2*p(2).*Gamma+p(3);
+        end
 end
 
 % stacking faults influence (powder)
@@ -196,28 +217,19 @@ switch FitOpt.PeakShiftModel
         end
     case 'Reuss'
         % first the anisotropy needs to be substracted
-        y.a_norm=pT(3);
-        y.a_norm_err=ss(3);
-        y.a_par=pT(1)+pT(3);
-        y.a_par_err=ss(1)+ss(3);
-        y.sig_ef=pT(1); % a0*sig*(1+nu_h00)/E_h00, but the stress needs to be evaluated from p(1) from the original fit, for cubic crystals E_h00=E and nu_h00=nu
-        y.sig_ef_err=ss(1); % a0*sig*(1+nu_h00)/E_h00, but the stress needs to be evaluated from p(1) from the original fit, for cubic crystals E_h00=E and nu_h00=nu
         if FitOpt.Material.av==1
-            if isnan(FitOpt.Material.E_100)
-                y.sin2psi0=2*FitOpt.Material.nu/(1+FitOpt.Material.nu);
-
-                y.a0=(y.a_par-y.a_norm)*y.sin2psi0+y.a_norm;
-                y.a0_err=(y.a_par_err-y.a_norm_err)*y.sin2psi0+y.a_norm_err;
-                y.sig=y.sig_ef*FitOpt.Material.E/(y.a0.*(1+FitOpt.Material.nu));
-                y.sig_err=y.sig_ef_err*FitOpt.Material.E/(y.a0.*(1+FitOpt.Material.nu))+y.sig_ef*y.a0_err*FitOpt.Material.E/(y.a0.^2.*(1+FitOpt.Material.nu));
-            else
-                y.sin2psi0=2*FitOpt.Material.nu_100/(1+FitOpt.Material.nu_100);
-
-                y.a0=(y.a_par-y.a_norm)*y.sin2psi0+y.a_norm;
-                y.a0_err=(y.a_par_err-y.a_norm_err)*y.sin2psi0+y.a_norm_err;
-                y.sig=y.sig_ef*FitOpt.Material.E_100/(y.a0.*(1+FitOpt.Material.nu_100));
-                y.sig_err=y.sig_ef_err*FitOpt.Material.E_100/(y.a0.*(1+FitOpt.Material.nu_100))+y.a0_err*FitOpt.Material.E_100/(y.a0.^2.*(1+FitOpt.Material.nu_100));
-            end
+            % known elastic constants
+            y.a0=pT(1);
+            y.a0_err=ss(1);
+            y.sig=pT(2);
+            y.sig_err=ss(2);
+        else
+            y.a_norm=pT(3);
+            y.a_norm_err=ss(3);
+            y.a_par=pT(1)+pT(3);
+            y.a_par_err=ss(1)+ss(3);
+            y.sig_ef=pT(1); % a0*sig*(1+nu_h00)/E_h00, but the stress needs to be evaluated from p(1) from the original fit, for cubic crystals E_h00=E and nu_h00=nu
+            y.sig_ef_err=ss(1); % a0*sig*(1+nu_h00)/E_h00, but the stress needs to be evaluated from p(1) from the original fit, for cubic crystals E_h00=E and nu_h00=nu
         end
 end
 
@@ -391,8 +403,14 @@ switch FitOpt.PeakShiftModel
         fix(1:4)=[0 0 0 0];
     case 'Reuss'
         pT0=polyfit(sin2psi,ahkl,1);
-        p0(1:2)=pT0;
-        fix(1:4)=[0 0 0 1];
+        if FitOpt.Material.av==1
+            p0(1)=mean(ahkl);
+            p0(2)=sign(pT0(1))*0.001;
+            fix(1:4)=[0 0 1 1];
+        else
+            p0(1:2)=pT0;
+            fix(1:4)=[0 0 0 1];
+        end
 end
 
 if FitOpt.FitSF==1
